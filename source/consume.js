@@ -8,9 +8,9 @@ export function consume(source) {
 		if (type === greet) {
 			talkback = data
 			talkback(deliver)
-		} else if (type === 1) {
+		} else if (type === deliver) {
 			talkback(deliver)
-		} else if (type === 2) {
+		} else if (type === terminate) {
 			talkback(terminate)
 		}
 	})
