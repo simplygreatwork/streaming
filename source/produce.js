@@ -3,6 +3,7 @@ import { greet, deliver, terminate } from './types.js'
 
 export function produce(producer) {
 	
+	let bust_cache = false
 	return function(start, sink) {
 		if (start !== greet) return
 		if (typeof producer !== 'function') {
@@ -13,6 +14,9 @@ export function produce(producer) {
 		let end = false
 		let clean
 		sink(greet, function(type) {
+			if (type == 11) {
+				bust_cache = true
+			}
 			if (! end) {
 				if (type === terminate) end = true
 				if (end && typeof clean === 'function') clean()
@@ -30,11 +34,13 @@ export function produce(producer) {
 				}
 			},
 			function() {
+				bust_cache = false
 				if (! end) {
 					end = true
 					sink(terminate)
 				}
-			}
+			},
+			bust_cache
 		)
 	}
 }

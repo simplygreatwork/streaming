@@ -1,4 +1,5 @@
 
+import { Bus } from './bus.js'
 import { produce } from '../../source/produce.js'
 import { transform } from '../../source/transform.js'
 import { consume } from '../../source/consume.js'
@@ -10,32 +11,84 @@ import { interval } from '../../source/interval.js'
 import { take } from '../../source/take.js'
 import { map } from '../../source/map.js'
 
+const bust_cache = true
+let bus = new Bus()
 let source = pipe(
-	create_source({ length: 10, period: 100, error: false }),
-	take(7),
-	transform(function(each, push) {
-		push(each + '!')
-	})
+	create_source({ length: 3, period: 300, error: false })
 )
 
-consume(pipe(source,
-	each(function(each) {
-		console.log(each)
-	}),
-	error(function(error) {
-		console.error(`An error occured: ${error}`)
-	}),
-	done(function(error) {
-		if (! error) console.log(`Done.`)
-		else console.error(`Done except with an error: ${error}`)
-	})
-))
+bus.on('first', function() {
+	consume(pipe(source,
+		each(function(each) {
+			console.log(each)
+		}),
+		error(function(error) {
+			console.error(`An error occured: ${error}`)
+		}),
+		done(function(error) {
+			if (! error) console.log(`Done.`)
+			else console.error(`Done except with an error: ${error}`)
+			bus.emit('second')
+		})
+	))
+})
+
+bus.on('second', function() {
+	consume(pipe(source,
+		each(function(each) {
+			console.log(each)
+		}),
+		error(function(error) {
+			console.error(`An error occured: ${error}`)
+		}),
+		done(function(error) {
+			if (! error) console.log(`Done.`)
+			else console.error(`Done except with an error: ${error}`)
+			bus.emit('third')
+		})
+	))
+})
+
+bus.on('third', function() {
+	consume(pipe(source,
+		each(function(each) {
+			console.log(each)
+		}),
+		error(function(error) {
+			console.error(`An error occured: ${error}`)
+		}),
+		done(function(error) {
+			if (! error) console.log(`Done.`)
+			else console.error(`Done except with an error: ${error}`)
+			bus.emit('fourth')
+		})
+	), bust_cache)
+})
+
+bus.on('fourth', function() {
+	consume(pipe(source,
+		each(function(each) {
+			console.log(each)
+		}),
+		error(function(error) {
+			console.error(`An error occured: ${error}`)
+		}),
+		done(function(error) {
+			if (! error) console.log(`Done.`)
+			else console.error(`Done except with an error: ${error}`)
+			bus.emit('end')
+		})
+	))
+})
+
+bus.emit('first')
 
 function create_source(options) {
 	
 	let items = []
 	return pipe(
-		produce(function(next, error, done) {
+		produce(function(next, error, done, bust) {
+			if (bust) items = []
 			if (items.length > 0) {
 				items.forEach((item) => next(item))
 				done()

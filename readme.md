@@ -10,3 +10,4 @@
 ### Roadmap
 
 - want to extend "take" to allow for pagination (slice)
+- ideas: emit, log, pluck, total/reduce

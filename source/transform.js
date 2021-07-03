@@ -8,7 +8,7 @@ export function transform(fn) {
 			if (start === greet) {
 				source(greet, function(type, data) {
 					if (type == deliver) {
-						var result = fn(data, function(value) {
+						let result = fn(data, function(value) {
 							sink(type, value)
 						})
 						if (result !== undefined) {
