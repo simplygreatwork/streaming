@@ -18,6 +18,7 @@ let source = pipe(
 )
 
 bus.on('first', function() {
+	console.log('Caching results.')
 	consume(pipe(source,
 		each(function(each) {
 			console.log(each)
@@ -34,6 +35,7 @@ bus.on('first', function() {
 })
 
 bus.on('second', function() {
+	console.log('Using cached results.')
 	consume(pipe(source,
 		each(function(each) {
 			console.log(each)
@@ -50,6 +52,7 @@ bus.on('second', function() {
 })
 
 bus.on('third', function() {
+	console.log('Busting cached results.')
 	consume(pipe(source,
 		each(function(each) {
 			console.log(each)
@@ -66,6 +69,7 @@ bus.on('third', function() {
 })
 
 bus.on('fourth', function() {
+	console.log('Using cached results.')
 	consume(pipe(source,
 		each(function(each) {
 			console.log(each)
@@ -87,17 +91,17 @@ function create_source(options) {
 	
 	let items = []
 	return pipe(
-		produce(function(next, error, done, bust) {
+		produce(function(value, error, done, bust) {
 			if (bust) items = []
 			if (items.length > 0) {
-				items.forEach((item) => next(item))
+				items.forEach((item) => value(item))
 				done()
 			} else {
 				repeat(options.length, options.period, function(index) {
 					if (options.error && index === 2) error('error')
 					let item = `item ${index}`
 					items.push(item)
-					next(item)
+					value(item)
 				}, done)
 			}
 		}),

@@ -6,3 +6,4 @@
 3. consume by force reload
 
 - use message types to force reload
+- allow produce callbag to cache internally (?)

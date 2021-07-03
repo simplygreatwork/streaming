@@ -14,16 +14,16 @@ function create_source(options) {
 	
 	let items = []
 	return pipe(
-		produce(function(next, error, done) {
+		produce(function(value, error, done) {
 			if (items.length > 0) {
-				items.forEach((item) => next(item))
+				items.forEach((item) => value(item))
 				done()
 			} else {
 				repeat(options.length, options.delay, function(index) {
 					if (options.error && index === 2) error('error')
 					let item = `item ${index}`
 					items.push(item)
-					next(item)
+					value(item)
 				}, done)
 			}
 		})
@@ -37,14 +37,18 @@ let source = pipe(
 	})
 )
 
-Source(source).on('each', function(each) {
+source = Source(source)
+source.on('each', function(each) {
 	console.log(each)
-}).on('error', function(error) {
+})
+source.on('error', function(error) {
 	console.error(`An error occured: ${error}`)
-}).on('done', function(error) {
+})
+source.on('done', function(error) {
 	if (! error) console.log(`Done.`)
 	else console.error(`Done except with an error: ${error}`)
-}).consume()
+})
+source.consume()
 
 function repeat(length, delay, fn, done) {
 	
@@ -60,19 +64,17 @@ function repeat(length, delay, fn, done) {
 	}, delay)
 }
 
-function Source(source_) {
+function Source(source) {
 	
-	let object
 	let keys = {}
-	return object = {
+	return {
 		on: function(key, fn) {
 			keys[key] = fn
-			return object
 		},
 		consume: function() {
 			consume(pipe(source,
-				each(function(each_) {
-					keys['each'](each_)
+				each(function(each) {
+					keys['each'](each)
 				}),
 				error(function(error) {
 					keys['error'](error)

@@ -11,3 +11,16 @@
 
 - want to extend "take" to allow for pagination (slice)
 - ideas: emit, log, pluck, total/reduce
+- idea: viable to pass data paramters (options) upward to a source? url? range? bust-cache?
+- illustrate backpressure, throttling, etc
+- be able to pass multiple non-fatal errors - e..g not using terminate - but another code (12)
+
+### Examples Roadmap
+
+- filter
+- pluck
+- ideas: emit, log, pluck, total/reduce
+- idea: viable to pass data paramters (options) upward to a source? url? range? bust-cache?
+- show how to pluck using transform
+- show how to filter using transform
+- show how to reduce using transform

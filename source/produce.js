@@ -1,5 +1,6 @@
 
 import { greet, deliver, terminate } from './types.js'
+const bust_cache_type = 11
 
 export function produce(producer) {
 	
@@ -9,12 +10,13 @@ export function produce(producer) {
 		if (typeof producer !== 'function') {
 			sink(greet, () => {})
 			sink(terminate)
+			console.error('The callbag "produce" requires a function parameter.')
 			return
 		}
 		let end = false
 		let clean
 		sink(greet, function(type) {
-			if (type == 11) {
+			if (type == bust_cache_type) {
 				bust_cache = true
 			}
 			if (! end) {

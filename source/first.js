@@ -22,9 +22,9 @@ export function first(fn) {
 								talkback(deliver)
 							}
 						} else {
-							sink(deliver, data)
+							sink(type, data)
 						}
-					} else if (type === terminate) {
+					} else {
 						sink(type, data)
 					}
 				})

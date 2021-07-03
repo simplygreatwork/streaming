@@ -35,16 +35,16 @@ function create_source(options) {
 	
 	let items = []
 	return pipe(
-		produce(function(next, error, done) {
+		produce(function(value, error, done) {
 			if (items.length > 0) {
-				items.forEach((item) => next(item))
+				items.forEach((item) => value(item))
 				done()
 			} else {
 				repeat(options.length, options.period, function(index) {
 					if (options.error && index === 2) error('error')
 					let item = `item ${index}`
 					items.push(item)
-					next(item)
+					value(item)
 				}, done)
 			}
 		}),
