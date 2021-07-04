@@ -5,26 +5,26 @@ export const pull = function(operation) {
 	
 	return function(source) {
 		let talkback
-		let each_
-		let ended_
+		let next_
+		let done_
 		source(0, function(type, data) {
 			if (type === greet) {
 				talkback = data
 				operation(
-					function(each) {
-						each_ = each
+					function(next) {
+						next_ = next
 						talkback(1)
 					},
-					function(ended) {
-						ended_ = ended
+					function(done) {
+						done_ = done
 					}
 				)
 			}
-			if (type === deliver) each_(data)
+			if (type === deliver) next_(data)
 			if (type === terminate) {
-				if (ended_) {
-					ended_(data)
-					ended_ = null
+				if (done_) {
+					done_(data)
+					done_ = null
 				} 
 			}
 		})

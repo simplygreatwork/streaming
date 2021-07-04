@@ -8,12 +8,12 @@ let source = pipe(
 
 pipe(
 	source,
-	pull(function(each, ended) {
-		ended(function() {
-			console.log('ended')
+	pull(function(next, done) {
+		done(function() {
+			console.log('done')
 		})
 		repeat(100, 100, function() {
-			each(function(each) {
+			next(function(each) {
 				console.log('each: ' + each)
 			})
 		})
