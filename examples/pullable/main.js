@@ -1,4 +1,5 @@
 
+import { greet, deliver, terminate } from '../../source/types.js'
 import { pipe } from '../../source/pipe.js'
 import { pull } from '../../source/pull.js'
 
@@ -20,18 +21,23 @@ pipe(
 	})
 )
 
-export function pullable_source() {
+function pullable_source() {
 	
 	return function(start, sink) {
-		if (start !== 0) return
-		let i = 10
+		if (start !== greet) return
+		let index = 10
 		const talkback = function(type, data) {
-			if (type === 1) {
-				if (i <= 20) sink(1, i++)
-				else sink(2)
+			if (type === deliver) {
+				if (index <= 20) {
+					sink(deliver, index)
+					console.log(`Source delivered value "${index}" on demand.`)
+					index++
+				} else {
+					sink(terminate)
+				}
 			}
 		}
-		sink(0, talkback)
+		sink(greet, talkback)
 	}
 }
 
