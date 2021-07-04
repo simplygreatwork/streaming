@@ -1,24 +1,28 @@
 
+import { greet, deliver, terminate } from './types.js'
+
 export function* to_iterable(source) {
 	
 	let talkback
-	let hasVal = false
-	let val
-	source(0, (t, d) => {
-		if (t === 0) talkback = d
-		else if (t === 1) {
-			val = d
-			hasVal = true
+	let hasValue = false
+	let value
+	source(0, function(type, data) {
+		if (type === 0) {
+			talkback = data
+		} else if (type === 1) {
+			value = data
+			hasValue = true
+		} else if (type === terminate) {
+			talkback = false
 		}
-		else if (t === 2) talkback = false
 	})
 	while (talkback) {
-		talkback(1)
-		if (hasVal) {
-			yield val
-			hasVal = false
+		talkback(deliver)
+		if (hasValue) {
+			yield value
+			hasValue = false
 		} else {
-			if (talkback) talkback(2)
+			if (talkback) talkback(terminate)
 			return
 		}
 	}
