@@ -10,18 +10,17 @@ import { error } from '../../source/error.js'
 import { done } from '../../source/done.js'
 import { consume } from '../../source/consume.js'
 
-let total = 0
 let source = pipe(
 	interval(10),
 	take(10),
 	transform(function(each, push) {
-		push({ value: each}) 
+		push({ value: each }) 
 	}),
 	transform(function(each, push) {
-		push(each.value) 
+		push(each.value) 								// pluck
 	}),
-	transform(function(each, push) {
-		if (each % 2 === 1) push(each) 
+	transform(function(each, push) {				// filter
+		if (each % 2 === 1) push(each)
 	}),
 	transform(function(each, push, type) {
 		push(each) 

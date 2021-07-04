@@ -24,3 +24,6 @@
 - show how to pluck using transform
 - show how to filter using transform
 - show how to reduce using transform
+- 
+
+- https://github.com/callbag/callbag/blob/master/getting-started.md
