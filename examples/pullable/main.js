@@ -23,12 +23,13 @@ pipe(
 
 function pullable_source() {
 	
+	const range = [10, 20]
 	return function(start, sink) {
 		if (start !== greet) return
-		let index = 10
-		const talkback = function(type, data) {
+		let index = range[0]
+		sink(greet, function(type, data) {
 			if (type === deliver) {
-				if (index <= 20) {
+				if (index <= range[1]) {
 					sink(deliver, index)
 					console.log(`Source delivered value "${index}" on demand.`)
 					index++
@@ -36,8 +37,7 @@ function pullable_source() {
 					sink(terminate)
 				}
 			}
-		}
-		sink(greet, talkback)
+		})
 	}
 }
 
