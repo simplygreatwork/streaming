@@ -1,21 +1,25 @@
 
 import { greet, deliver, terminate } from '../../source/types.js'
 import { pipe } from '../../source/pipe.js'
-import { to_iterable } from '../../source/to-iterable.js'
+import { pull } from '../../source/pull.js'
 
-const iterator = pipe(
-  pullable_source_sync(),
-  to_iterable
+let source = pipe(
+	pullable_source_async()
 )
 
-console.log('iterator.next(): ' + iterator.next().value)
-console.log('iterator.next(): ' + iterator.next().value)
-console.log('iterator.next(): ' + iterator.next().value)
-console.log('iterator.next(): ' + iterator.next().value)
-
-if (false) for (let each of iterator) {
-	console.log('each: ' + each)
-}
+pipe(
+	source,
+	pull(function(next, done) {
+		done(function() {
+			console.log('done')
+		})
+		repeat(20, 100, function(index) {
+			next(function(each) {
+				console.log('each: ' + each)
+			})
+		})
+	})
+)
 
 function pullable_source_sync() {
 	
@@ -50,4 +54,17 @@ function pullable_source_async() {
 			}
 		})
 	}
+}
+
+function repeat(length, period, fn, done) {
+	
+	let index = 0
+	let id = setInterval(function() {
+		fn(index)
+		index++
+		if (index >= length) {
+			clearInterval(id)
+			if (done) done()
+		}
+	}, period)
 }
