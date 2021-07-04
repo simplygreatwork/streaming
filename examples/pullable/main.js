@@ -12,7 +12,7 @@ pipe(
 		done(function() {
 			console.log('done')
 		})
-		repeat(100, 100, function() {
+		repeat(3, 100, function(index) {
 			next(function(each) {
 				console.log('each: ' + each)
 			})
@@ -39,12 +39,11 @@ function repeat(length, period, fn, done) {
 	
 	let index = 0
 	let id = setInterval(function() {
-		if (index > length) {
+		fn(index)
+		index++
+		if (index >= length) {
 			clearInterval(id)
 			if (done) done()
-		} else {
-			fn(index)
 		}
-		index++
 	}, period)
 }
