@@ -6,10 +6,9 @@ import { to_async_iterable } from '../../source/to-async-iterable.js'
 
 async function main() {
 	
-	console.log('main')
 	const values = pipe(
 		pullable_source_async,
-		//take(10),					// take does not work here
+		take(10),
 		to_async_iterable
 	)
 	for await (let each of values) {
@@ -22,12 +21,14 @@ main()
 function pullable_source_async(start, sink) {
 	
 	if (start !== greet) return
-	let i = 0
+	let index = 0
 	sink(0, function(type, data) {
 		if (type === deliver) {
 			setTimeout(function() {
-				sink(deliver, i++)
-			}, 100)
+				sink(deliver, index)
+				console.log(`Source created and delivered value "${index}" on demand.`)
+				index++
+			}, 300)
 		}
 	})
 }

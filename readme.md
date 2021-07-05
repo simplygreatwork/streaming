@@ -27,3 +27,4 @@
 - 
 
 - https://github.com/callbag/callbag/blob/master/getting-started.md
+- switch among backup sources, remote-1, remote-2, local, cached

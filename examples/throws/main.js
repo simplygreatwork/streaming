@@ -11,7 +11,7 @@ import { consume } from '../../source/consume.js'
 
 let source = pipe(
 	interval(10),
-	throws(),
+	throws(0.1),
 	take(20)
 )
 

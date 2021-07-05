@@ -10,7 +10,9 @@ export function interval(period) {
 			sink(deliver, index++)
 		}, period)
 		sink(greet, function(type) {
-			if (type === terminate) clearInterval(id)
+			if (type === terminate) {
+				clearInterval(id)
+			}
 		})
 	}
 }

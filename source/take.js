@@ -5,16 +5,16 @@ export function take(max) {
 	
 	return function(source) {
 		return function(start, sink) {
-			if (start !== 0) return
+			if (start !== greet) return
 			let taken = 0
-			let ended
 			let talkback
+			let end
 			source(greet, function(type, data) {
 				if (type === greet) {
 					talkback = data
-					sink(greet, function() {
+					sink(greet, function(type, data) {
 						if (type === terminate) {
-							ended = true
+							end = true
 							talkback(type, data)
 						} else if (taken < max) {
 							talkback(type, data)
@@ -24,8 +24,8 @@ export function take(max) {
 					if (taken < max) {
 						taken++
 						sink(type, data)
-						if (taken === max && ! ended) {
-							ended = true
+						if (taken === max && ! end) {
+							end = true
 							talkback(terminate)
 							sink(terminate)
 						}
@@ -37,3 +37,4 @@ export function take(max) {
 		}
 	}
 }
+

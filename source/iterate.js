@@ -5,10 +5,14 @@ export const iterate = function(operation) {
 	
 	return function(source) {
 		let talkback
-		source(0, function(type, data) {
-			if (type === 0) talkback = data
-			if (type === 1) operation(data)
-			if (type === 1 || type === 0) talkback(1)
+		source(greet, function(type, data) {
+			if (type === greet) {
+				talkback = data
+				talkback(deliver)
+			} else if (type === deliver) {
+				operation(data)
+				talkback(deliver)
+			}
 		})
 	}
 }
