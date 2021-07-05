@@ -9,7 +9,7 @@ export function consume(source, bust_cache) {
 		if (type === greet) {
 			talkback = data
 			talkback(deliver)
-			if (bust_cache ==+ true) talkback(bust_cache_type)
+			if (bust_cache === true) talkback(bust_cache_type)
 		} else if (type === deliver) {
 			talkback(deliver)
 		} else if (type === terminate) {
